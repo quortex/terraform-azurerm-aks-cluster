@@ -92,6 +92,12 @@ variable "cluster_pod_cidr" {
   default     = null
 }
 
+variable "cluster_outbound_ip_name" {
+  type        = string
+  description = "The name of the public IP address used for cluster's outbound traffic."
+  default     = "quortex-outbound"
+}
+
 variable "node_pool_default" {
   type        = any
   description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"

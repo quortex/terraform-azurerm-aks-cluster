@@ -91,7 +91,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
 resource "azurerm_public_ip" "outbound" {
-  name                = "${terraform.workspace}-outbound"
+  name                = var.cluster_outbound_ip_name
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
