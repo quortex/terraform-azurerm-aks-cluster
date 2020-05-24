@@ -2,7 +2,7 @@
 resource "azurerm_kubernetes_cluster" "quortex" {
 
   # The name of the Managed Kubernetes Cluster to create.
-  name = var.cluster_name
+  name = length(var.cluster_name) > 0 ? var.cluster_name : var.name
 
   # The location where the Managed Kubernetes Cluster should be created.
   location = var.location
@@ -91,7 +91,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
 resource "azurerm_public_ip" "outbound" {
-  name                = var.cluster_outbound_ip_name
+  name                = length(var.cluster_outbound_ip_name) > 0 ? var.cluster_outbound_ip_name : "${var.name}-outbound"
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
