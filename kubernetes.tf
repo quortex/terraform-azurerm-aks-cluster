@@ -14,7 +14,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   kubernetes_version = var.kubernetes_version
 
   # DNS prefix specified when creating the managed cluster.
-  dns_prefix = var.cluster_dns_prefix
+  dns_prefix = length(var.cluster_dns_prefix) > 0 ? var.cluster_dns_prefix : var.name
 
   service_principal {
     client_id     = var.service_principal_id

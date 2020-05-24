@@ -54,7 +54,7 @@ variable "kubernetes_version" {
 variable "cluster_dns_prefix" {
   type        = string
   description = "DNS prefix specified when creating the managed cluster."
-  default     = "quortex"
+  default     = ""
 }
 
 variable "service_principal_id" {
