@@ -29,10 +29,15 @@ variable "resource_group_name" {
   description = "The name of the resource group in which to create resources."
 }
 
+variable "name" {
+  type        = string
+  description = "A name from which the name of the resources will be chosen. Note that each resource name can be set individually."
+}
+
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster."
-  default     = "quortex"
+  default     = ""
 }
 
 variable "cluster_subnet_id" {
@@ -49,7 +54,7 @@ variable "kubernetes_version" {
 variable "cluster_dns_prefix" {
   type        = string
   description = "DNS prefix specified when creating the managed cluster."
-  default     = "quortex"
+  default     = ""
 }
 
 variable "service_principal_id" {
@@ -95,7 +100,7 @@ variable "cluster_pod_cidr" {
 variable "cluster_outbound_ip_name" {
   type        = string
   description = "The name of the public IP address used for cluster's outbound traffic."
-  default     = "quortex-outbound"
+  default     = ""
 }
 
 variable "node_pool_default" {
