@@ -103,6 +103,12 @@ variable "cluster_outbound_ip_name" {
   default     = ""
 }
 
+variable "kube_dashboard_enabled" {
+  type        = bool
+  description = "Whether to enable kube dashboard."
+  default     = false
+}
+
 variable "node_pool_default" {
   type        = any
   description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"
@@ -116,7 +122,7 @@ variable "node_pool_additionals" {
 }
 
 variable "tags" {
-  type        = map
+  type        = map(any)
   description = "Tags to apply to resources. A list of key->value pairs."
   default     = {}
 }

@@ -55,6 +55,9 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     http_application_routing {
       enabled = false
     }
+    kube_dashboard {
+      enabled = var.kube_dashboard_enabled
+    }
   }
 
   tags = var.tags
