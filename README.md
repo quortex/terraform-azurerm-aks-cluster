@@ -23,7 +23,6 @@ module "aks-cluster" {
   source = "quortex/aks-cluster/azurerm"
 
   # Globally used variables.
-  subscription_id     = local.subscription_id
   location            = local.resource_group_location
   resource_group_name = local.resource_group_name
   name                = "quortex"

@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-variable "subscription_id" {
-  type        = string
-  description = "The Subscription ID which should be used."
-}
-
 variable "location" {
   type        = string
   description = "The location where the resources should be created."
