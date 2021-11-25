@@ -96,6 +96,18 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   }
 }
 
+# Public IP pool to assign to nodepool
+resource "azurerm_public_ip_prefix" "nodegrouppool" {
+  for_each = toset([for k, v in var.node_pool_additionals : k if lookup(var.node_pool_additionals[k], "node_public_ip_prefix_id", null) != null])
+
+  name                = each.value
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  prefix_length = var.node_pool_additionals[each.value]["node_public_ip_prefix_id"]
+
+  tags = var.tags
+}
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
 resource "azurerm_public_ip" "outbound" {
