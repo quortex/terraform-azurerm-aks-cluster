@@ -15,6 +15,6 @@
  */
 
 output "name" {
-  value = azurerm_kubernetes_cluster.quortex.name
+  value       = azurerm_kubernetes_cluster.quortex.name
   description = "Cluster name"
 }
