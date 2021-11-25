@@ -82,7 +82,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
   vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
   enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
-  node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null)
+  node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodegrouppool[each.key].id
   enable_auto_scaling      = true
   node_count               = lookup(each.value, "node_min_count", 1)
   min_count                = lookup(each.value, "node_min_count", 1)
@@ -95,6 +95,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
     ignore_changes = [node_count]
   }
 }
+
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
 resource "azurerm_public_ip" "outbound" {
