@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     name                     = "default"
     vm_size                  = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
     enable_node_public_ip    = lookup(var.node_pool_default, "enable_node_public_ip", false)
-    node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodegrouppool[0].id
+    node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodepool[0].id
     enable_auto_scaling      = true
     node_count               = lookup(var.node_pool_default, "node_min_count", 1)
     min_count                = lookup(var.node_pool_default, "node_min_count", 1)
@@ -82,7 +82,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
   vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
   enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
-  node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodegrouppool[each.key].id
+  node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodepool[each.key].id
   enable_auto_scaling      = true
   node_count               = lookup(each.value, "node_min_count", 1)
   min_count                = lookup(each.value, "node_min_count", 1)
@@ -97,7 +97,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
 }
 
 # Public IP pool for default nodepool
-resource "azurerm_public_ip_prefix" "default_nodegrouppool" {
+resource "azurerm_public_ip_prefix" "default_nodepool" {
   count = lookup(var.node_pool_default, "node_public_ip_prefix_id", 0) == 0 ? 0 : 1
 
   name                = "default"
@@ -110,7 +110,7 @@ resource "azurerm_public_ip_prefix" "default_nodegrouppool" {
 }
 
 # Public IP pool to assign to additionnal nodepool
-resource "azurerm_public_ip_prefix" "nodegrouppool" {
+resource "azurerm_public_ip_prefix" "nodepool" {
   for_each = toset([for k, v in var.node_pool_additionals : k if lookup(var.node_pool_additionals[k], "node_public_ip_prefix_id", null) != null])
 
   name                = each.value
