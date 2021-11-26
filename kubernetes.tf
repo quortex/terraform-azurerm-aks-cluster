@@ -111,7 +111,7 @@ resource "azurerm_public_ip_prefix" "default_nodepool" {
 
 # Public IP pool to assign to additionnal nodepool
 resource "azurerm_public_ip_prefix" "nodepool" {
-  for_each = toset([for k, v in var.node_pool_additionals : k if lookup(var.node_pool_additionals[k], "node_public_ip_prefix_id", null) != null])
+  for_each = toset([for k, v in var.node_pool_additionals : k if lookup(v, "node_public_ip_prefix_id", null) != null])
 
   name                = each.value
   location            = var.location
