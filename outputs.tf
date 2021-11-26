@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+output "name" {
+  value       = azurerm_kubernetes_cluster.quortex.name
+  description = "Cluster name"
+}

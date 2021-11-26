@@ -24,16 +24,17 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   # The default nodepool will be used by tools (prometheus, grafana...).
   # It can be used with General purpose virtual machine sizes.
   default_node_pool {
-    name                  = "default"
-    vm_size               = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
-    enable_node_public_ip = lookup(var.node_pool_default, "enable_node_public_ip", false)
-    enable_auto_scaling   = true
-    node_count            = lookup(var.node_pool_default, "node_min_count", 1)
-    min_count             = lookup(var.node_pool_default, "node_min_count", 1)
-    max_count             = lookup(var.node_pool_default, "node_max_count", 8)
-    node_taints           = lookup(var.node_pool_default, "node_taints", null)
-    max_pods              = lookup(var.node_pool_default, "max_pods", null)
-    vnet_subnet_id        = var.cluster_subnet_id
+    name                     = "default"
+    vm_size                  = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
+    enable_node_public_ip    = lookup(var.node_pool_default, "enable_node_public_ip", false)
+    node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodepool[0].id
+    enable_auto_scaling      = true
+    node_count               = lookup(var.node_pool_default, "node_min_count", 1)
+    min_count                = lookup(var.node_pool_default, "node_min_count", 1)
+    max_count                = lookup(var.node_pool_default, "node_max_count", 8)
+    node_taints              = lookup(var.node_pool_default, "node_taints", null)
+    max_pods                 = lookup(var.node_pool_default, "max_pods", null)
+    vnet_subnet_id           = var.cluster_subnet_id
   }
 
   network_profile {
@@ -77,21 +78,48 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   for_each = var.node_pool_additionals
 
   # The name of the node pool.
-  name                  = each.key
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.quortex.id
-  vm_size               = lookup(each.value, "vm_size", "Standard_F16s_v2")
-  enable_node_public_ip = lookup(each.value, "enable_node_public_ip", false)
-  enable_auto_scaling   = true
-  node_count            = lookup(each.value, "node_min_count", 1)
-  min_count             = lookup(each.value, "node_min_count", 1)
-  max_count             = lookup(each.value, "node_max_count", 8)
-  node_taints           = lookup(each.value, "node_taints", null)
-  max_pods              = lookup(each.value, "max_pods", null)
-  vnet_subnet_id        = var.cluster_subnet_id
+  name                     = each.key
+  kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
+  vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
+  enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
+  node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodepool[each.key].id
+  enable_auto_scaling      = true
+  node_count               = lookup(each.value, "node_min_count", 1)
+  min_count                = lookup(each.value, "node_min_count", 1)
+  max_count                = lookup(each.value, "node_max_count", 8)
+  node_taints              = lookup(each.value, "node_taints", null)
+  max_pods                 = lookup(each.value, "max_pods", null)
+  vnet_subnet_id           = var.cluster_subnet_id
 
   lifecycle {
     ignore_changes = [node_count]
   }
+}
+
+# Public IP pool for default nodepool
+resource "azurerm_public_ip_prefix" "default_nodepool" {
+  count = lookup(var.node_pool_default, "node_public_ip_prefix_id", 0) == 0 ? 0 : 1
+
+  name                = "default"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  prefix_length = var.node_pool_default["node_public_ip_prefix_id"]
+
+  tags = var.tags
+}
+
+# Public IP pool to assign to additionnal nodepool
+resource "azurerm_public_ip_prefix" "nodepool" {
+  for_each = toset([for k, v in var.node_pool_additionals : k if lookup(v, "node_public_ip_prefix_id", null) != null])
+
+  name                = each.value
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  prefix_length = var.node_pool_additionals[each.value]["node_public_ip_prefix_id"]
+
+  tags = var.tags
 }
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
