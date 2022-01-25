@@ -18,3 +18,8 @@ output "name" {
   value       = azurerm_kubernetes_cluster.quortex.name
   description = "Cluster name"
 }
+
+output "node_resource_group" {
+  value       = azurerm_kubernetes_cluster.quortex.node_resource_group
+  description = "Cluster specific resource group"
+}
