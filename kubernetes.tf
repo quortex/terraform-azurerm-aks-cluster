@@ -21,6 +21,10 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     client_secret = var.service_principal_secret
   }
 
+  # The SKU Tier that should be used for this Kubernetes Cluster.
+  # Possible values are Free and Paid (which includes the Uptime SLA).
+  sku_tier = var.sku_tier
+
   # The default nodepool will be used by tools (prometheus, grafana...).
   # It can be used with General purpose virtual machine sizes.
   default_node_pool {

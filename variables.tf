@@ -62,6 +62,12 @@ variable "service_principal_secret" {
   description = "The Client secret of the Service Principal used for AKS cluster."
 }
 
+variable "sku_tier" {
+  type        = string
+  description = "The SKU Tier that should be used for this Kubernetes Cluster. Possible values are Free and Paid (which includes the Uptime SLA)."
+  default     = "Free"
+}
+
 variable "cluster_network_plugin" {
   type        = string
   description = "Network plugin to use for networking. Currently supported values are azure and kubenet."
