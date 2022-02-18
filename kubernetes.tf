@@ -29,6 +29,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   # It can be used with General purpose virtual machine sizes.
   default_node_pool {
     name                     = "default"
+    availability_zones       = lookup(var.node_pool_default, "availability_zones", [])
     vm_size                  = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
     enable_node_public_ip    = lookup(var.node_pool_default, "enable_node_public_ip", false)
     node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodepool[0].id
@@ -38,6 +39,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     max_count                = lookup(var.node_pool_default, "node_max_count", 8)
     node_taints              = lookup(var.node_pool_default, "node_taints", null)
     max_pods                 = lookup(var.node_pool_default, "max_pods", null)
+    ultra_ssd_enabled        = lookup(var.node_pool_default, "ultra_ssd", false)
     vnet_subnet_id           = var.cluster_subnet_id
   }
 
@@ -84,6 +86,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   # The name of the node pool.
   name                     = each.key
   kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
+  availability_zones       = lookup(each.value, "availability_zones", [])
   vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
   enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
   node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodepool[each.key].id
@@ -93,6 +96,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   max_count                = lookup(each.value, "node_max_count", 8)
   node_taints              = lookup(each.value, "node_taints", null)
   max_pods                 = lookup(each.value, "max_pods", null)
+  ultra_ssd_enabled        = lookup(each.value, "ultra_ssd", false)
   vnet_subnet_id           = var.cluster_subnet_id
 
   lifecycle {
