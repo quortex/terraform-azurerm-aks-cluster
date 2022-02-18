@@ -38,7 +38,11 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     max_count                = lookup(var.node_pool_default, "node_max_count", 8)
     node_taints              = lookup(var.node_pool_default, "node_taints", null)
     max_pods                 = lookup(var.node_pool_default, "max_pods", null)
-    vnet_subnet_id           = var.cluster_subnet_id
+    os_disk_type             = lookup(var.node_pool_default, "os_disk_type", "Managed")
+    os_disk_size_gb          = lookup(var.node_pool_default, "os_disk_size_gb", 128)
+    ultra_ssd_enabled        = lookup(var.node_pool_default, "ultra_ssd_enabled", false)
+
+    vnet_subnet_id = var.cluster_subnet_id
   }
 
   network_profile {
@@ -93,7 +97,11 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   max_count                = lookup(each.value, "node_max_count", 8)
   node_taints              = lookup(each.value, "node_taints", null)
   max_pods                 = lookup(each.value, "max_pods", null)
-  vnet_subnet_id           = var.cluster_subnet_id
+  os_disk_type             = lookup(each.value, "os_disk_type", "Managed")
+  os_disk_size_gb          = lookup(each.value, "os_disk_size_gb", 128)
+  ultra_ssd_enabled        = lookup(each.value, "ultra_ssd_enabled", false)
+
+  vnet_subnet_id = var.cluster_subnet_id
 
   lifecycle {
     ignore_changes = [node_count]
