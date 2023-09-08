@@ -134,10 +134,8 @@ resource "azurerm_public_ip" "outbound" {
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
-  zones               = [1, 2, 3]
-
+  zones               = length(var.public_ip_zones) == 0 ? [1] : var.public_ip_zones
   # Standard sku required as it will be used by standard LoadBalancer.
-  sku = "Standard"
-
+  sku  = "Standard"
   tags = var.tags
 }
