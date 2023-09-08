@@ -30,7 +30,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   default_node_pool {
     name                     = "default"
     vm_size                  = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
-    availability_zones       = lookup(var.node_pool_default, "availability_zones", [])
+    zones                    = lookup(var.node_pool_default, "zones", [])
     enable_node_public_ip    = lookup(var.node_pool_default, "enable_node_public_ip", false)
     node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodepool[0].id
     enable_auto_scaling      = true
@@ -61,15 +61,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
       outbound_ip_address_ids = [azurerm_public_ip.outbound.id]
     }
   }
-
-  addon_profile {
-    http_application_routing {
-      enabled = false
-    }
-    kube_dashboard {
-      enabled = var.kube_dashboard_enabled
-    }
-  }
+  http_application_routing_enabled = false
 
   tags = var.tags
 
@@ -89,7 +81,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   # The name of the node pool.
   name                     = each.key
   kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
-  availability_zones       = lookup(each.value, "availability_zones", [])
+  zones                    = lookup(each.value, "zones", [])
   vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
   enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
   node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodepool[each.key].id
