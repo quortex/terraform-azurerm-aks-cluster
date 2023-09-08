@@ -124,8 +124,8 @@ resource "azurerm_public_ip_prefix" "nodepool" {
   resource_group_name = var.resource_group_name
 
   prefix_length = var.node_pool_additionals[each.value]["node_public_ip_prefix_id"]
-
-  tags = var.tags
+  zones         = length(var.public_ip_zones) == 0 ? [1] : var.public_ip_zones
+  tags          = var.tags
 }
 
 # The public IP to use as outbound IP form AKS managed LoadBalancer.
