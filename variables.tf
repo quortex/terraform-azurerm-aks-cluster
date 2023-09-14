@@ -37,8 +37,8 @@ variable "cluster_name" {
 
 variable "public_ip_zones" {
   type        = list(string)
-  description = " (Optional) A collection containing the availability zone to allocate the Public IP in. Changing this forces a new resource to be created"
-  default     = [1]
+  description = "A collection containing the availability zone to allocate the Public IP in. Changing this forces a new resource to be created"
+  default     = ["1", "2", "3"]
 }
 
 variable "cluster_subnet_id" {
@@ -133,4 +133,3 @@ variable "tags" {
   description = "Tags to apply to resources. A list of key->value pairs."
   default     = {}
 }
-
