@@ -111,7 +111,7 @@ resource "azurerm_public_ip_prefix" "default_nodepool" {
   resource_group_name = var.resource_group_name
 
   prefix_length = var.node_pool_default["node_public_ip_prefix_id"]
-  zones         = length(var.public_ip_zones) == 0 ? [1] : var.public_ip_zones
+  zones         = var.public_ip_zones
   tags          = var.tags
 }
 
@@ -124,7 +124,7 @@ resource "azurerm_public_ip_prefix" "nodepool" {
   resource_group_name = var.resource_group_name
 
   prefix_length = var.node_pool_additionals[each.value]["node_public_ip_prefix_id"]
-  zones         = length(var.public_ip_zones) == 0 ? [1] : var.public_ip_zones
+  zones         = var.public_ip_zones
   tags          = var.tags
 }
 
@@ -134,7 +134,7 @@ resource "azurerm_public_ip" "outbound" {
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
-  zones               = length(var.public_ip_zones) == 0 ? [1] : var.public_ip_zones
+  zones               = var.public_ip_zones
   # Standard sku required as it will be used by standard LoadBalancer.
   sku  = "Standard"
   tags = var.tags
