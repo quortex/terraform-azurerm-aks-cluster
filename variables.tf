@@ -35,6 +35,12 @@ variable "cluster_name" {
   default     = ""
 }
 
+variable "public_ip_zones" {
+  type        = list(string)
+  description = "A collection containing the availability zone to allocate the Public IP in. Changing this forces a new resource to be created"
+  default     = ["1", "2", "3"]
+}
+
 variable "cluster_subnet_id" {
   type        = string
   description = "The AKS cluster dedicated subnet identifier."
