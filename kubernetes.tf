@@ -46,11 +46,10 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   }
 
   network_profile {
-    network_plugin     = var.cluster_network_plugin
-    dns_service_ip     = var.cluster_dns_service_ip
-    docker_bridge_cidr = var.cluster_docker_bridge_cidr
-    service_cidr       = var.cluster_service_cidr
-    pod_cidr           = var.cluster_pod_cidr
+    network_plugin = var.cluster_network_plugin
+    dns_service_ip = var.cluster_dns_service_ip
+    service_cidr   = var.cluster_service_cidr
+    pod_cidr       = var.cluster_pod_cidr
 
     # Standard LoadBalancer is required for multiple nodepools.
     load_balancer_sku = "standard"
@@ -88,7 +87,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   node_count               = lookup(each.value, "node_min_count", 1)
   min_count                = lookup(each.value, "node_min_count", 1)
   max_count                = lookup(each.value, "node_max_count", 8)
-  node_taints              = lookup(each.value, "node_taints", null)
   max_pods                 = lookup(each.value, "max_pods", null)
   os_disk_type             = lookup(each.value, "os_disk_type", "Managed")
   os_disk_size_gb          = lookup(each.value, "os_disk_size_gb", 128)
