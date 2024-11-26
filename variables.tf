@@ -119,7 +119,7 @@ variable "node_pool_default" {
 
 variable "node_pool_additionals" {
   type        = any
-  description = "The cluster additional node pools configuration. Defined as a map whick key defines the node name and value is a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count"
+  description = "The cluster additional node pools configuration. Defined as a map whick key defines the node name and value is a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"
   default     = {}
 }
 

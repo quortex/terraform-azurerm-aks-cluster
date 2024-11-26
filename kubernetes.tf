@@ -88,6 +88,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   min_count                = lookup(each.value, "node_min_count", 1)
   max_count                = lookup(each.value, "node_max_count", 8)
   max_pods                 = lookup(each.value, "max_pods", null)
+  node_taints              = lookup(each.value, "node_taints", null)
   os_disk_type             = lookup(each.value, "os_disk_type", "Managed")
   os_disk_size_gb          = lookup(each.value, "os_disk_size_gb", 128)
   ultra_ssd_enabled        = lookup(each.value, "ultra_ssd_enabled", false)
