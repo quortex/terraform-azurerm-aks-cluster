@@ -86,11 +86,6 @@ variable "cluster_dns_service_ip" {
   default     = "10.0.0.10"
 }
 
-variable "cluster_docker_bridge_cidr" {
-  type        = string
-  description = "IP address (in CIDR notation) used as the Docker bridge IP address on nodes. This is required when network_plugin is set to azure."
-  default     = "172.17.0.1/16"
-}
 
 variable "cluster_service_cidr" {
   type        = string
@@ -118,13 +113,13 @@ variable "kube_dashboard_enabled" {
 
 variable "node_pool_default" {
   type        = any
-  description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"
+  description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count"
   default     = {}
 }
 
 variable "node_pool_additionals" {
   type        = any
-  description = "The cluster additional node pools configuration. Defined as a map whick key defines the node name and value is a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"
+  description = "The cluster additional node pools configuration. Defined as a map whick key defines the node name and value is a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count"
   default     = {}
 }
 

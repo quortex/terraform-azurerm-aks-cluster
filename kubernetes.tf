@@ -31,13 +31,12 @@ resource "azurerm_kubernetes_cluster" "quortex" {
     name                     = "default"
     vm_size                  = lookup(var.node_pool_default, "vm_size", "Standard_DS3_v2")
     zones                    = lookup(var.node_pool_default, "zones", [])
-    enable_node_public_ip    = lookup(var.node_pool_default, "enable_node_public_ip", false)
+    node_public_ip_enabled   = lookup(var.node_pool_default, "node_public_ip_enabled", false)
     node_public_ip_prefix_id = lookup(var.node_pool_default, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.default_nodepool[0].id
-    enable_auto_scaling      = true
+    auto_scaling_enabled     = true
     node_count               = lookup(var.node_pool_default, "node_min_count", 1)
     min_count                = lookup(var.node_pool_default, "node_min_count", 1)
     max_count                = lookup(var.node_pool_default, "node_max_count", 8)
-    node_taints              = lookup(var.node_pool_default, "node_taints", null)
     max_pods                 = lookup(var.node_pool_default, "max_pods", null)
     os_disk_type             = lookup(var.node_pool_default, "os_disk_type", "Managed")
     os_disk_size_gb          = lookup(var.node_pool_default, "os_disk_size_gb", 128)
@@ -83,9 +82,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   kubernetes_cluster_id    = azurerm_kubernetes_cluster.quortex.id
   zones                    = lookup(each.value, "zones", [])
   vm_size                  = lookup(each.value, "vm_size", "Standard_F16s_v2")
-  enable_node_public_ip    = lookup(each.value, "enable_node_public_ip", false)
+  node_public_ip_enabled   = lookup(each.value, "node_public_ip_enabled", false)
   node_public_ip_prefix_id = lookup(each.value, "node_public_ip_prefix_id", null) == null ? null : azurerm_public_ip_prefix.nodepool[each.key].id
-  enable_auto_scaling      = true
+  auto_scaling_enabled     = true
   node_count               = lookup(each.value, "node_min_count", 1)
   min_count                = lookup(each.value, "node_min_count", 1)
   max_count                = lookup(each.value, "node_max_count", 8)
