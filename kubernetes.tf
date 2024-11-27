@@ -25,6 +25,9 @@ resource "azurerm_kubernetes_cluster" "quortex" {
   # Possible values are Free and Paid (which includes the Uptime SLA).
   sku_tier = var.sku_tier
 
+  node_os_upgrade_channel = var.node_os_upgrade_channel
+  cost_analysis_enabled   = var.cost_analysis_enabled
+
   # The default nodepool will be used by tools (prometheus, grafana...).
   # It can be used with General purpose virtual machine sizes.
   default_node_pool {

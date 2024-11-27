@@ -128,3 +128,15 @@ variable "tags" {
   description = "Tags to apply to resources. A list of key->value pairs."
   default     = {}
 }
+
+variable "cost_analysis_enabled" {
+  type        = bool
+  description = "(Optional) Should cost analysis be enabled for this Kubernetes Cluster? Defaults to false. The sku_tier must be set to Standard or Premium to enable this feature. Enabling this will add Kubernetes Namespace and Deployment details to the Cost Analysis views in the Azure portal."
+  default     = false
+}
+
+variable "node_os_upgrade_channel" {
+  type        = string
+  description = "The upgrade channel for this Kubernetes Cluster Nodes' OS Image. Possible values are Unmanaged, SecurityPatch, NodeImage and None. Defaults to None to keep old previous behavior"
+  default     = "None"
+}
