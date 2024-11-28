@@ -86,11 +86,6 @@ variable "cluster_dns_service_ip" {
   default     = "10.0.0.10"
 }
 
-variable "cluster_docker_bridge_cidr" {
-  type        = string
-  description = "IP address (in CIDR notation) used as the Docker bridge IP address on nodes. This is required when network_plugin is set to azure."
-  default     = "172.17.0.1/16"
-}
 
 variable "cluster_service_cidr" {
   type        = string
@@ -118,7 +113,7 @@ variable "kube_dashboard_enabled" {
 
 variable "node_pool_default" {
   type        = any
-  description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count, node_taints"
+  description = "The cluster default node pool configuration. Defined as a block following official documentation (https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#default_node_pool) for these values => vm_size, node_min_count, node_max_count"
   default     = {}
 }
 
@@ -132,4 +127,16 @@ variable "tags" {
   type        = map(any)
   description = "Tags to apply to resources. A list of key->value pairs."
   default     = {}
+}
+
+variable "cost_analysis_enabled" {
+  type        = bool
+  description = "(Optional) Should cost analysis be enabled for this Kubernetes Cluster? Defaults to false. The sku_tier must be set to Standard or Premium to enable this feature. Enabling this will add Kubernetes Namespace and Deployment details to the Cost Analysis views in the Azure portal."
+  default     = false
+}
+
+variable "node_os_upgrade_channel" {
+  type        = string
+  description = "The upgrade channel for this Kubernetes Cluster Nodes' OS Image. Possible values are Unmanaged, SecurityPatch, NodeImage and None. Defaults to None to keep old previous behavior"
+  default     = "None"
 }
