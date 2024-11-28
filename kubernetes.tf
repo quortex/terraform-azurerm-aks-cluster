@@ -23,8 +23,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
 
   # The SKU Tier that should be used for this Kubernetes Cluster.
   # Possible values are Free and Paid (which includes the Uptime SLA).
-  sku_tier = var.sku_tier
-
+  sku_tier                = var.sku_tier
   node_os_upgrade_channel = var.node_os_upgrade_channel
   cost_analysis_enabled   = var.cost_analysis_enabled
 
