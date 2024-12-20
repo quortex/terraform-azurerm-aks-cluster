@@ -49,6 +49,7 @@ resource "azurerm_kubernetes_cluster" "quortex" {
 
   network_profile {
     network_plugin = var.cluster_network_plugin
+    network_policy = var.cluster_network_policy
     dns_service_ip = var.cluster_dns_service_ip
     service_cidr   = var.cluster_service_cidr
     pod_cidr       = var.cluster_pod_cidr
