@@ -80,6 +80,12 @@ variable "cluster_network_plugin" {
   default     = "azure"
 }
 
+variable "cluster_network_policy" {
+  type        = string
+  description = "Sets up network policy to be used with Azure CNI. Network policy allows us to control the traffic flow between pods. Currently supported values are azure."
+  default     = null
+}
+
 variable "cluster_dns_service_ip" {
   type        = string
   description = "IP address within the Kubernetes service address range that will be used by cluster service discovery (kube-dns). This is required when network_plugin is set to azure."
